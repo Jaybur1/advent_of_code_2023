@@ -14,6 +14,14 @@ class CubeConundrum
   end
 
   # part 2
+  def get_sum_power()
+    sum = 0
+    File.readlines(@input_file, chomp: true).each_with_index do |line, i|
+      sum += get_power(line.gsub!(/Game\s\d+:\s/, '').split(';'))
+    end
+    sum
+  end
+
   private
   def is_possible?(game)
     game.each do |round|
@@ -27,4 +35,16 @@ class CubeConundrum
     end
     true
   end
+
+  def get_power(game)
+    game_min_cubes = Hash.new(0)
+    game.each do |round|
+      round.split(',').each do |attempt|
+        amount, color = attempt.strip.split(' ')
+        game_min_cubes[color] = [game_min_cubes[color], amount.to_i].max
+      end
+    end
+    game_min_cubes.values.reject(&:zero?).inject(:*)
+  end
+
 end
