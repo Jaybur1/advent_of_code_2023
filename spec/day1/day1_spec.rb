@@ -1,7 +1,7 @@
 require_relative "../../day1/trebuchet.rb"
 # part 1
 
-RSpec.describe "a specification" do
+RSpec.describe "Day 1 Trebuchet" do
   it "Should return 142 (part1)" do
     trebuchet = Trebuchet.new('./spec/day1/day1part1test.txt')
     expect(trebuchet.get_code).to eq 142
