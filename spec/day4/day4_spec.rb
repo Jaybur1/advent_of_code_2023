@@ -6,7 +6,4 @@ RSpec.describe 'Day 4 Scratchcards' do
     expect(scratchcards.get_sum_points).to eq 13
   end
 
-  it.skip 'Part 2: Should return' do
-    # expect(scratchcards.get_sum_points).to eq 13
-  end
 end

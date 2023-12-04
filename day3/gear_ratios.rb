@@ -80,8 +80,6 @@ class GearRatios
     # # #check prev line
     check_line_for_ratios(next_line_serials, ratios, index)
 
-    p ratios
-
     ratios.length == 2 ? ratios.last * ratios.first : 0
   end
 
