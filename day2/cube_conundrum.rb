@@ -6,27 +6,28 @@ class CubeConundrum
   # part 1
   def get_sum_possible_games()
     sum = 0
-    File.readlines(@input_file, chomp: true).each_with_index do |line, i|
-      id = i + 1
-      sum += is_possible?(line.gsub!(/Game\s\d+:\s/, '').split(';')) ? id : 0
-    end
+    handle_input { |game, i| sum += is_possible?(game) ? i + 1 : 0 }
     sum
   end
 
   # part 2
   def get_sum_power()
     sum = 0
-    File.readlines(@input_file, chomp: true).each_with_index do |line, i|
-      sum += get_power(line.gsub!(/Game\s\d+:\s/, '').split(';'))
-    end
+    handle_input { |game, _i| sum += get_power(game) }
     sum
+
   end
 
   private
+  def handle_input
+    File.readlines(@input_file, chomp: true).each_with_index do |line, i|
+      yield line.gsub!(/Game\s\d+:\s/, '').split(';'), i
+    end
+  end
+
   def is_possible?(game)
     game.each do |round|
       round_cubes = Hash.new(0)
-
       round.split(',').each do |attempt|
         amount, color = attempt.strip.split(' ')
         round_cubes[color] += amount.to_i
