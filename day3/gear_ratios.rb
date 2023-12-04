@@ -17,7 +17,15 @@ class GearRatios
     sum
   end
   # part 2 TODO:
-  def placeholder;end
+  def get_sum_gear_ratios
+    sum = 0
+    @input.each_with_index do |line, i|
+      get_gears_with_index(line).each do |possible_gear|
+        sum += get_sum_adjacent_ratios(possible_gear, line, i)
+      end
+    end
+    sum
+  end
 
   private
   def symbol_adjacent?(serial_set,line ,i)
@@ -47,5 +55,45 @@ class GearRatios
       serial_numbers << [ serial, start_index, start_index + serial.length]
     end
     serial_numbers
+  end
+
+  def get_gears_with_index(line)
+    gears = []
+    line.scan(/(\*)/) do |num_match|
+      gear = num_match.first
+      start_index = Regexp.last_match.begin(0)
+      gears << [ gear, start_index ]
+    end
+    gears
+  end
+
+  def get_sum_adjacent_ratios(possible_gear,line, i)
+    _, index = possible_gear
+    ratios = []
+    current_line_serials= get_serial_numbers_with_index(line)
+    prev_line_serials = get_serial_numbers_with_index(@input[i - 1]) if i > 0
+    next_line_serials = get_serial_numbers_with_index(@input[i + 1]) if i < @input.length - 1
+    # #check current line
+    check_line_for_ratios(current_line_serials, ratios, index)
+    # # #check prev line
+    check_line_for_ratios(prev_line_serials, ratios, index)
+    # # #check prev line
+    check_line_for_ratios(next_line_serials, ratios, index)
+
+    p ratios
+
+    ratios.length == 2 ? ratios.last * ratios.first : 0
+  end
+
+  def check_line_for_ratios(line_serials, ratios, index)
+    line_serials.each do |serial|
+      value, start_index, end_index = serial
+
+      left= index + 1 == start_index
+      right = index == end_index
+      in_range = (index >= start_index) && (index <= end_index - 1)
+
+      ratios << value.to_i if left || right || in_range
+    end if line_serials
   end
 end
